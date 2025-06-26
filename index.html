@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Reptile Cursor Trail</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #000;
+      cursor: none;
+    }
+
+    .trail-dot {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: lime;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Create 20 dots -->
+  <script>
+    const dots = [];
+    const numDots = 20;
+
+    // Create dot elements and add to body
+    for (let i = 0; i < numDots; i++) {
+      const dot = document.createElement('div');
+      dot.classList.add('trail-dot');
+      document.body.appendChild(dot);
+      dots.push({ el: dot, x: 0, y: 0 });
+    }
+
+    const mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+
+    // Update mouse position on move
+    document.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+
+    // Animation loop
+    function animate() {
+      let x = mouse.x;
+      let y = mouse.y;
+
+      dots.forEach((dot, index) => {
+        // Move each dot slightly towards the position of the one before it
+        dot.x += (x - dot.x) * 0.25;
+        dot.y += (y - dot.y) * 0.25;
+        dot.el.style.left = dot.x + 'px';
+        dot.el.style.top = dot.y + 'px';
+
+        // Next dot moves towards the current dot's position
+        x = dot.x;
+        y = dot.y;
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+
+</body>
+</html>
